@@ -1,0 +1,51 @@
+import pygame
+from pygame.math import Vector2
+import core
+
+
+def setup():
+    core.fps = 60
+    core.WINDOW_SIZE = [800, 500]
+
+    #balle
+    core.memory("centre", Vector2(400, 250))
+    core.memory("rayon", 10)
+    core.memory("couleur", (255, 255, 255))
+    core.memory("direction", pygame.Vector2(0, 0))
+
+    #barres
+    core.memory("surface", pygame.display.set_mode((800, 500)))
+    core.memory("rect1", pygame.Rect(10, 200, 10, 100))
+    core.memory("rect2", pygame.Rect(780, 200, 10, 100))
+
+def run():
+
+
+    pygame.init()
+    surface = pygame.display.set_mode((800, 500))
+    color = (255, 255, 255)
+    pygame.draw.rect(core.memory("surface"), core.memory("couleur"), core.memory("rect1"))
+    pygame.draw.rect(core.memory("surface"), core.memory("couleur"), core.memory("rect2"))
+    pygame.draw.rect(surface, color, pygame.Rect(400, 0, 1, 800))
+    pygame.draw.circle(core.screen, core.memory("couleur"), core.memory("centre"), core.memory("rayon"))
+
+    #déplacement de la balle
+    if core.getKeyPressList("SPACE"):
+        core.memory("direction",pygame.Vector2(2.5, 2.5))
+
+    core.memory("centre", core.memory("centre")+core.memory("direction"))
+
+    if core.memory("centre").y < 0 or core.memory("centre").y > core.WINDOW_SIZE[1]:
+       core.memory("direction", Vector2(core.memory("direction").x, core.memory("direction").y*-1))
+
+
+    if core.memory("centre").x < 0 or core.memory("centre").x > core.WINDOW_SIZE[0]:
+       core.memory("direction", Vector2(core.memory("direction").x*-1, core.memory("direction").y ))
+
+
+    #déplacement des barres
+    if core.getKeyPressList("z"):
+        core.memory("drect1", pygame.Rect(0, -1, 0, 0))
+        core.memory("rect1", core.memory("rect1")+core.memory("drect1"))
+
+core.main(setup, run)
